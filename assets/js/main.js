@@ -40,9 +40,6 @@ $(document).ready(function() {
         citySearch(cityName);
     });
 
-
-
-
     /* Request city info from localStorage or the Open Weather API */
     const citySearch = (cityName) => {
         let weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
@@ -54,9 +51,11 @@ $(document).ready(function() {
             let weatherObject = {
                 weather: null,
                 forecast: null,
+                forecastArray: [],
             };
             console.log('Local storage not found, getting from API')
             
+            /* Get both objects before processing the results */
             $.when(
                 $.ajax({
                     url: weatherURL,
@@ -66,9 +65,32 @@ $(document).ready(function() {
                     url: forecastURL,
                     method: "GET"
                 })
-            ).done(function(thisWeather, thisForecast) {
+            ).done(function(thisWeather, thisForecastList) {
                 weatherObject.weather = thisWeather[0];
-                weatherObject.forecast = thisForecast[0];
+                weatherObject.forecast = thisForecastList[0].list;
+                
+                /*
+                    Build an array of objects that includes the following information for each of the next 5 days:
+                    The date as .format('M/DD/YYYY')
+                    The overall weather (sunny, cloudy etc) along with the icon for that weather
+                    The temperature (high)
+                    The humidity (high)
+                    {date: }
+                    Step through all of the 3 hour datapoints in the .list. Build a results object
+                    and update the object's entries for a day if a new high temp or humidity is found.
+                */
+                for (thisForecast of weatherObject.forecast) {
+                    //console.log(thisForecast);
+                    weatherObject.forecastArray.push(
+                        {
+                            date: moment(thisForecast.dt_txt).format('M/DD/YYYY'),
+                            weather: thisForecast.weather[0].icon,
+                            temperature: thisForecast.main.temp,
+                            humidity: thisForecast.main.humidity
+                        }
+                    );
+                };
+                console.log(weatherObject.forecastArray);
                 //console.log(thisWeather);
                 //console.log(thisForecast);
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
@@ -78,14 +100,18 @@ $(document).ready(function() {
         
     };
 
+    /* Print information about the weather on the right side of the screen */
     const showCityInfo = (cityName) => {
         cityInfo = JSON.parse(localStorage.getItem(cityName));
-        //console.log(cityInfo);
+        //console.log(cityInfo.forecast.list);
         const kelvinTemp = cityInfo.weather.main.temp;
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
         $('#city').text(cityName);
         $('#temp').text(`Temperature: ${fahrenheitTemp}`);
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
         $('#wind').text(cityInfo.weather.wind.speed);
+        $('#forecast-container').text(cityInfo.forecast);
+        //console.log(cityInfo.forecast[0]);
+        forecastHour = moment(cityInfo.forecast[0].dt_txt).format('DD');
     };
 });
