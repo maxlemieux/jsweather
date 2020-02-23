@@ -45,7 +45,8 @@ $(document).ready(function() {
 
     /* Request city info from localStorage or the Open Weather API */
     const citySearch = (cityName) => {
-        let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+        let weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+        let forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}`;
         if (localStorage.getItem(cityName)) {
             console.log('Local storage found');
             showCityInfo(cityName);
@@ -55,15 +56,21 @@ $(document).ready(function() {
                 forecast: null,
             };
             console.log('Local storage not found, getting from API')
+            
             $.when(
                 $.ajax({
-                    url: queryURL,
+                    url: weatherURL,
                     method: "GET"
                 }),
-            )
-            .then(function(response) {
-                weatherObject.weather = response;
-                console.log(response);
+                $.ajax({
+                    url: forecastURL,
+                    method: "GET"
+                })
+            ).done(function(thisWeather, thisForecast) {
+                weatherObject.weather = thisWeather[0];
+                weatherObject.forecast = thisForecast[0];
+                //console.log(thisWeather);
+                //console.log(thisForecast);
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
                 showCityInfo(cityName);
             });
@@ -73,6 +80,7 @@ $(document).ready(function() {
 
     const showCityInfo = (cityName) => {
         cityInfo = JSON.parse(localStorage.getItem(cityName));
+        //console.log(cityInfo);
         const kelvinTemp = cityInfo.weather.main.temp;
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
         $('#city').text(cityName);
