@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <title>Weather Dashboard</title>
+  </head>
+
+  <body>
+    <header class="jumbotron bg-secondary text-light    ">
+      <h1 class="display-4">Weather Dashboard</h1>
+      <p class="lead">Never be caught without your umbrella again</p>
+    </header>
+    <div class="container" id="main">
+      
+        <div class="row">
+            <div class="col-md-4 bg-light">
+                <h3>Search for a City</h3>
+                <!-- Search box and city list go here -->
+                <div class='mb-3' id='search-container'>
+                    <form class='form-row' id='search-form'>
+                        <div class='col-auto'>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="search-field" placeholder="Enter a city">
+                                <span class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id='search-button'>
+                                        <i class="fa fa-search"></i>
+                                    </button>    
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id='city-container'>
+                    <!-- List of cities goes here -->
+                    <ul class='list-group' id='city-list'>
+                        <li class='list-group-item city-item' data-city='Fake City 1'>Fake City 1</li>
+                        <li class='list-group-item city-item' data-city='Fake City 2'>Fake City 2</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <!-- Weather information goes here -->
+                <div id='weather-info'>
+                
+                </div>
+                <div id='weather-forecast'>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/js/main.js"></script>
+  </body>
+</html>
