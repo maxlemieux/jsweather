@@ -1,11 +1,14 @@
 $(document).ready(function() {
+    const apiKey = '8d0d2314d6e034efd962fbaf225561c3';
+    
     let cityList = [];
 
-    const updateCityList = () => {
-        /* Get the newest city for the list from the search field */
-        const thisCity = $('#search-field').val();
-        cityList.push(thisCity);
-
+    const updateCityList = (cityName) => {
+        if (cityList.includes(cityName)) {
+            return;
+        } else {
+            cityList.push(cityName);
+        }
         /* Reset the unordered list of cities and rebuild it */
         const cityListElement = $('#city-list');
         cityListElement.empty();
@@ -21,10 +24,16 @@ $(document).ready(function() {
 
     $('#search-form').on('submit', function(event) {
         event.preventDefault();
-        updateCityList();
+        let cityName = $('#search-field').val();
+        updateCityList(cityName);
+        citySearch(cityName);
     });
 
-    $('#search-button').on('click', updateCityList);
+    $('#search-button').on('click', function() {
+        let cityName = $('#search-field').val();
+        updateCityList(cityName);
+        citySearch(cityName);
+    });
 
 
 
@@ -32,4 +41,36 @@ $(document).ready(function() {
         /* Show saved info on the right */
     });
 
+    /* Request city info from localStorage or the Open Weather API */
+    const citySearch = (cityName) => {
+        let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+        if (localStorage.getItem(cityName)) {
+            console.log('Local storage found')
+            const response = JSON.parse(localStorage.getItem(cityName));
+            const kelvinTemp = response.main.temp;
+            const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
+            $('#city').text(cityName);
+            $('#temp').text(`Temperature: ${fahrenheitTemp}`);
+            $('#humidity').text(`Humidity: ${response.main.humidity}`);
+            $('#wind').text(response.wind.speed);
+        } else {
+            console.log('Local storage not found, getting from API')
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function(response) {
+                const kelvinTemp = response.main.temp;
+                const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
+                $('#city').text(cityName);
+                $('#temp').text(`Temperature: ${fahrenheitTemp}`);
+                $('#humidity').text(`Humidity: ${response.main.humidity}`);
+                $('#wind').text(response.wind.speed);
+                localStorage.setItem(cityName, JSON.stringify(response))
+            });
+        };
+    };
+
+    const showCityInfo = (cityName) => {
+
+    };
 });

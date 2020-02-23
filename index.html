@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -23,7 +26,7 @@
   </head>
 
   <body>
-    <header class="jumbotron bg-secondary text-light    ">
+    <header class="jumbotron bg-secondary text-light">
       <h1 class="display-4">Weather Dashboard</h1>
       <p class="lead">Never be caught without your umbrella again</p>
     </header>
@@ -43,10 +46,10 @@
                                         <i class="fa fa-search"></i>
                                     </button>    
                                 </span>
-                            </div>
-                        </div>
+                            </div><!--input-group-->
+                        </div><!--col-auto-->
                     </form>
-                </div>
+                </div><!--search-container-->
                 <div id='city-container'>
                     <!-- List of cities goes here -->
                     <ul class='list-group' id='city-list'>
@@ -61,7 +64,15 @@
                 
                 </div>
                 <div id='weather-forecast'>
+                    <div id='city'>
+                    
+                    </div>
+                    <div id='temp'>
 
+                    </div>
+                    <div id='humidity'>
+                        
+                    </div>
                 </div>
             </div>
         </div>
