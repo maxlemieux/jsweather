@@ -115,12 +115,16 @@ $(document).ready(function() {
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
         const weatherIcon = cityInfo.weather.weather[0].icon;
         const iconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+
+        /* Show today's detailed information */
         $('#city').text(`${cityName} (${weatherDate})`);
         $('#icon').attr('src', iconUrl);
         $('#temp').text(`Temperature: ${fahrenheitTemp}`);
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
         $('#wind').text(cityInfo.weather.wind.speed);
         $('#uv').text(cityInfo.weather.main.uv);
+        
+        /* Show the forecast */
         $('#forecast-container').text(cityInfo.forecastArray);
     };
 });
