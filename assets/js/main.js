@@ -102,10 +102,8 @@ $(document).ready(function() {
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
                 
                 /* Make the API call for UV index info, based on the lat/long we just got */
-                getUvIndex(cityName);
-
-                /* Show all the city info */
-                showCityInfo(cityName);
+                getUvIndex(cityName)
+                
             });
         };
         
@@ -122,6 +120,9 @@ $(document).ready(function() {
         }).then(function(response) {
                 cityInfo.uvIndex = response.value;
                 localStorage.setItem(cityName, JSON.stringify(cityInfo));
+
+                /* Show all the city info */
+                showCityInfo(cityName);
             }
         );
     }
