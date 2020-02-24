@@ -100,16 +100,36 @@ $(document).ready(function() {
                 //console.log(thisWeather);
                 //console.log(thisForecast);
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
+                
+                /* Make the API call for UV index info, based on the lat/long we just got */
+                getUvIndex(cityName);
+
+                /* Show all the city info */
                 showCityInfo(cityName);
             });
         };
         
     };
 
+    const getUvIndex = (cityName) => {
+        const cityInfo = JSON.parse(localStorage.getItem(cityName));
+        const lon = cityInfo.weather.coord.lon;
+        const lat = cityInfo.weather.coord.lat;
+        const uvIndexURL = `http://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`;
+        $.ajax({
+            url: uvIndexURL,
+            method: "GET",
+        }).then(function(response) {
+                cityInfo.uvIndex = response.value;
+                localStorage.setItem(cityName, JSON.stringify(cityInfo));
+            }
+        );
+    }
+
     /* Print information about the weather on the right side of the screen */
     const showCityInfo = (cityName) => {
-        cityInfo = JSON.parse(localStorage.getItem(cityName));
-        console.log(cityInfo.weather);
+        const cityInfo = JSON.parse(localStorage.getItem(cityName));
+        //console.log(cityInfo.weather);
         const weatherDate = moment.unix(cityInfo.weather.dt).format('M/DD/YYYY');
         const kelvinTemp = cityInfo.weather.main.temp;
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
@@ -121,8 +141,8 @@ $(document).ready(function() {
         $('#icon').attr('src', iconUrl);
         $('#temp').text(`Temperature: ${fahrenheitTemp}`);
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
-        $('#wind').text(cityInfo.weather.wind.speed);
-        $('#uv').text(cityInfo.weather.main.uv);
+        $('#wind').text(`Wind: ${cityInfo.weather.wind.speed}`);
+        $('#uv').text(`UV: ${cityInfo.uvIndex}`);
         
         /* Show the forecast */
         $('#forecast-container').text(cityInfo.forecastArray);
