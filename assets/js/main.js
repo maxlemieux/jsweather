@@ -81,14 +81,20 @@ $(document).ready(function() {
                 */
                 for (thisForecast of weatherObject.forecast) {
                     //console.log(thisForecast);
-                    weatherObject.forecastArray.push(
-                        {
-                            date: moment(thisForecast.dt_txt).format('M/DD/YYYY'),
-                            weather: thisForecast.weather[0].icon,
-                            temperature: thisForecast.main.temp,
-                            humidity: thisForecast.main.humidity
-                        }
-                    );
+                    const weatherIcon = `http://openweathermap.org/img/wn/${thisForecast.weather[0].icon}@2x.png`;
+                    const weatherDate = moment(thisForecast.dt_txt).format('M/DD/YYYY');
+                    const weatherHour = moment(thisForecast.dt_txt).format('HH');
+                    const fahrenheitTemp = ((thisForecast.main.temp - 273.15) * 9/5 + 32).toPrecision(3);
+                    if (weatherHour === '15') {
+                        weatherObject.forecastArray.push(
+                            {
+                                date: weatherDate,
+                                weather: weatherIcon,
+                                temperature: fahrenheitTemp,
+                                humidity: thisForecast.main.humidity
+                            }
+                        );
+                    };
                 };
                 console.log(weatherObject.forecastArray);
                 //console.log(thisWeather);
@@ -103,15 +109,18 @@ $(document).ready(function() {
     /* Print information about the weather on the right side of the screen */
     const showCityInfo = (cityName) => {
         cityInfo = JSON.parse(localStorage.getItem(cityName));
-        //console.log(cityInfo.forecast.list);
+        console.log(cityInfo.weather);
+        const weatherDate = moment.unix(cityInfo.weather.dt).format('M/DD/YYYY');
         const kelvinTemp = cityInfo.weather.main.temp;
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
-        $('#city').text(cityName);
+        const weatherIcon = cityInfo.weather.weather[0].icon;
+        const iconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+        $('#city').text(`${cityName} (${weatherDate})`);
+        $('#icon').attr('src', iconUrl);
         $('#temp').text(`Temperature: ${fahrenheitTemp}`);
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
         $('#wind').text(cityInfo.weather.wind.speed);
-        $('#forecast-container').text(cityInfo.forecast);
-        //console.log(cityInfo.forecast[0]);
-        forecastHour = moment(cityInfo.forecast[0].dt_txt).format('DD');
+        $('#uv').text(cityInfo.weather.main.uv);
+        $('#forecast-container').text(cityInfo.forecastArray);
     };
 });
