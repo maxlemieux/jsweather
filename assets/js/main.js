@@ -3,17 +3,22 @@ $(document).ready(function() {
     
     let cityList = [];
 
-    const updateCityList = (cityName) => {
-        if (cityList.includes(cityName)) {
+    const updateCityList = (action, cityName) => {
+        if (cityList.includes(cityName) && action === 'add') {
             return;
-        } else {
+        } else if (action === 'add') {
             cityList.push(cityName);
+        } else if (action === 'remove') {
+            for(let i = 0; i < cityList.length; i++){ 
+                if ( cityList[i] === cityName) {
+                  cityList.splice(i, 1); 
+                };
+            };
         }
         /* Reset the unordered list of cities and rebuild it */
         const cityListElement = $('#city-list');
         cityListElement.empty();
         for (const city of cityList) {
-            console.log(city);
             const cityElement = $('<li>');
             cityElement.attr('class', 'list-group-item city-item');
             cityElement.attr('data-city', city);
@@ -30,13 +35,11 @@ $(document).ready(function() {
     $('#search-form').on('submit', function(event) {
         event.preventDefault();
         let cityName = $('#search-field').val();
-        updateCityList(cityName);
         citySearch(cityName);
     });
 
     $('#search-button').on('click', function() {
         let cityName = $('#search-field').val();
-        updateCityList(cityName);
         citySearch(cityName);
     });
 
@@ -47,6 +50,7 @@ $(document).ready(function() {
         if (localStorage.getItem(cityName)) {
             console.log('Local storage found');
             showCityInfo(cityName);
+            updateCityList('add', cityName);
         } else {
             let weatherObject = {
                 weather: null,
@@ -65,7 +69,7 @@ $(document).ready(function() {
                     url: forecastURL,
                     method: "GET"
                 })
-            ).done(function(thisWeather, thisForecastList) {
+            ).then(function(thisWeather, thisForecastList) {
                 weatherObject.weather = thisWeather[0];
                 weatherObject.forecast = thisForecastList[0].list;
                 
@@ -97,14 +101,16 @@ $(document).ready(function() {
                     };
                 };
                 console.log(weatherObject.forecastArray);
-                //console.log(thisWeather);
-                //console.log(thisForecast);
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
                 
                 /* Make the API call for UV index info, based on the lat/long we just got */
                 getUvIndex(cityName)
-                
+            }, function() {
+                /* If there was an error with either of the AJAX calls */
+                console.log("error getting info, remove this city and show an error on page");
+                updateCityList('remove', cityName);
             });
+
         };
         
     };
@@ -120,6 +126,9 @@ $(document).ready(function() {
         }).then(function(response) {
                 cityInfo.uvIndex = response.value;
                 localStorage.setItem(cityName, JSON.stringify(cityInfo));
+
+                /* Add this city to the list on page */
+                updateCityList('add', cityName);
 
                 /* Show all the city info */
                 showCityInfo(cityName);
@@ -146,6 +155,24 @@ $(document).ready(function() {
         $('#uv').text(`UV: ${cityInfo.uvIndex}`);
         
         /* Show the forecast */
-        $('#forecast-container').text(cityInfo.forecastArray);
+//        $('#forecast-container').text(cityInfo.forecastArray);
+
+        for (forecast of cityInfo.forecastArray) {
+            const forecastElement = $('<div>').attr('class', 'card bg-primary text-light ma-1 p-2');
+            const forecastDate = $('<h5>').text(forecast.date);
+            forecastElement.append(forecastDate);
+
+            const forecastWeather = $('<img>').attr('src', forecast.weather);
+            forecastElement.append(forecastWeather);
+
+            const forecastTemp = $('<p>').text(`Temp: ${forecast.temperature}`);
+            forecastElement.append(forecastTemp);
+
+            const forecastHumidity = $('<p>').text(forecast.humidity);
+            forecastElement.append(forecastHumidity);
+
+            console.log(forecast);
+            $('#forecast-container').append(forecastElement);
+        }
     };
 });
