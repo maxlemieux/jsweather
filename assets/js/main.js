@@ -85,7 +85,7 @@ $(document).ready(function() {
                 */
                 for (thisForecast of weatherObject.forecast) {
                     //console.log(thisForecast);
-                    const weatherIcon = `http://openweathermap.org/img/wn/${thisForecast.weather[0].icon}@2x.png`;
+                    const weatherIcon = `http://openweathermap.org/img/wn/${thisForecast.weather[0].icon}.png`;
                     const weatherDate = moment(thisForecast.dt_txt).format('M/DD/YYYY');
                     const weatherHour = moment(thisForecast.dt_txt).format('HH');
                     const fahrenheitTemp = ((thisForecast.main.temp - 273.15) * 9/5 + 32).toPrecision(3);
@@ -151,15 +151,15 @@ $(document).ready(function() {
         $('#icon').attr('src', iconUrl);
         $('#temp').text(`Temperature: ${fahrenheitTemp}`);
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
-        $('#wind').text(`Wind: ${cityInfo.weather.wind.speed}`);
-        $('#uv').text(`UV: ${cityInfo.uvIndex}`);
+        $('#wind').text(`Wind Speed: ${cityInfo.weather.wind.speed}`);
+        $('#uv').text(`UV Index: ${cityInfo.uvIndex}`);
         
         /* Clear the forecast */
         $('#forecast-container').empty();
         $('#forecast-heading').text('5-Day Forecast:');
 
         for (forecast of cityInfo.forecastArray) {
-            const forecastElement = $('<div>').attr('class', 'card bg-primary text-light mx-3 p-2');
+            const forecastElement = $('<div>').attr('class', 'rounded bg-primary text-light mx-3 p-2');
             const forecastDate = $('<h5>').text(forecast.date);
             forecastElement.append(forecastDate);
 
