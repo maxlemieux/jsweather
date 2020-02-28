@@ -154,24 +154,24 @@ $(document).ready(function() {
         $('#wind').text(`Wind: ${cityInfo.weather.wind.speed}`);
         $('#uv').text(`UV: ${cityInfo.uvIndex}`);
         
-        /* Show the forecast */
-//        $('#forecast-container').text(cityInfo.forecastArray);
+        /* Clear the forecast */
+        $('#forecast-container').empty();
+        $('#forecast-heading').text('5-Day Forecast:');
 
         for (forecast of cityInfo.forecastArray) {
-            const forecastElement = $('<div>').attr('class', 'card bg-primary text-light ma-1 p-2');
+            const forecastElement = $('<div>').attr('class', 'card bg-primary text-light mx-3 p-2');
             const forecastDate = $('<h5>').text(forecast.date);
             forecastElement.append(forecastDate);
 
             const forecastWeather = $('<img>').attr('src', forecast.weather);
             forecastElement.append(forecastWeather);
 
-            const forecastTemp = $('<p>').text(`Temp: ${forecast.temperature}`);
+            const forecastTemp = $('<p>').html(`Temp: ${forecast.temperature} &#176;`);
             forecastElement.append(forecastTemp);
 
-            const forecastHumidity = $('<p>').text(forecast.humidity);
+            const forecastHumidity = $('<p>').text(`Humidity: ${forecast.humidity}%`);
             forecastElement.append(forecastHumidity);
 
-            console.log(forecast);
             $('#forecast-container').append(forecastElement);
         }
     };

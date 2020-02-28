@@ -26,14 +26,13 @@
   </head>
 
   <body>
-    <header class="jumbotron bg-secondary text-light">
-      <h1 class="display-4">Weather Dashboard</h1>
-      <p class="lead">Never be caught without your umbrella again</p>
+    <header class="bg-secondary text-light">
+      <h1 class="display-5 text-center">Weather Dashboard</h1>
     </header>
-    <div class="container" id="main">
+    <!--<div class="container" id="main">-->
       
         <div class="row">
-            <div class="col-md-4 bg-light">
+            <div class="col-md-4 p-3 bg-light">
                 <h3>Search for a City</h3>
                 <!-- Search box and city list go here -->
                 <div class='mb-3' id='search-container'>
@@ -60,40 +59,41 @@
             </div>
             <div class="col-md-8">
                 <!-- Weather information goes here -->
-                <div id='weather-info'>
-                    <div class='row'>
-                        <div class='col'>
-                            <h3 id='city'>
-                        
-                            </h3>
+                <div class='card' id='weather-info'>
+                    <div class="card-body">
+                        <div class='row'>
+                            <div class='col'>
+                                <h3 id='city'>
+                            
+                                </h3>
+                            </div>
+                            <div class='col'>
+                                <img id='icon'></img>
+                            </div>
                         </div>
-                        <div class='col'>
-                            <img id='icon'></img>
+                        <div id='temp'>
+    
                         </div>
+                        <div id='humidity'>
+                            
+                        </div>
+                        <div id='wind'>
+                            
+                        </div>
+                        <div id='uv'>
+                            
+                        </div>    
                     </div>
-                    
-                    <div id='temp'>
-
-                    </div>
-                    <div id='humidity'>
-                        
-                    </div>
-                    <div id='wind'>
-                        
-                    </div>
-                    <div id='uv'>
-                        
-                    </div>
-                
                 </div>
                 <div id='weather-forecast'>
+                    <h3 id='forecast-heading'></h3>
                     <div class='row' id='forecast-container'>
                     </div>
                 </div>
             </div>
         </div>
 
-    </div>
+    <!--</div>-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
