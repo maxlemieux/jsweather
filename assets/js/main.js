@@ -78,14 +78,13 @@ $(document).ready(function() {
                 weatherObject.forecast = thisForecastList[0].list;
                 
                 /*
-                    Build an array of objects that includes the following information for each of the next 5 days:
-                    The date as .format('M/DD/YYYY')
-                    The overall weather (sunny, cloudy etc) along with the icon for that weather
-                    The temperature (high)
-                    The humidity (high)
-                    {date: }
-                    Step through all of the 3 hour datapoints in the .list. Build a results object
-                    and update the object's entries for a day if a new high temp or humidity is found.
+                Build an array of objects that includes the following information for each of the next 5 days:
+                The date as .format('M/DD/YYYY')
+                The overall weather (sunny, cloudy etc) along with the icon for that weather
+                The temperature (high)
+                The humidity (high)
+                Step through all of the 3 hour datapoints in the .list. Build a results object
+                and update the object's entries for a day if a new high temp or humidity is found.
                 */
                 for (thisForecast of weatherObject.forecast) {
                     const weatherIcon = `http://openweathermap.org/img/wn/${thisForecast.weather[0].icon}.png`;
@@ -110,10 +109,16 @@ $(document).ready(function() {
             }, function() {
                 /* If there was an error with either of the AJAX calls */
                 updateCityList('remove', cityName);
+                const alertNotFound = $( "<div class='alert alert-danger m-3'>Oops! We couldn't find that city.</div>" );
+                $( "#main" ).append(alertNotFound);
+                /* Fade out the alert */
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove(); 
+                    });
+                }, 2000);
             });
-
-        };
-        
+        }
     };
 
     const getUvIndex = (cityName) => {
@@ -152,25 +157,36 @@ $(document).ready(function() {
         $('#temp').text(`Temperature: ${fahrenheitTemp}`);
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
         $('#wind').text(`Wind Speed: ${cityInfo.weather.wind.speed}`);
-        $('#uv').text(`UV Index: ${cityInfo.uvIndex}`);
+        $('#uv').html(`UV Index: <span class='badge' id='uv-value'>${cityInfo.uvIndex}</span>`);
 
         /* Get the UV index severity: 0-3 low, 4-6 med, 7-9 high, over 9 DANGER */
         const uvIndex = cityInfo.uvIndex;
         let uvClass;
         switch(true) {
             case uvIndex < 4:
-                uvClass = 'uvLow';
+                uvClass = 'badge-secondary';
+                break;
+            case uvIndex < 7:
+                uvClass = 'badge-success';
+                break;
+            case uvIndex < 9:
+                uvClass = 'badge-warning';
+                break;
+            case uvIndex > 9:
+                uvClass = 'badge-danger';
                 break;
             default:
+                uvClass = 'badge-secondary';
                 break;
-        }
+        };
+        $('#uv-value').addClass(uvClass);
         
         /* Clear the forecast */
         $('#forecast-container').empty();
         $('#forecast-heading').text('5-Day Forecast:');
 
         for (forecast of cityInfo.forecastArray) {
-            const forecastElement = $('<div>').attr('class', 'rounded bg-primary text-light mx-3 p-2');
+            const forecastElement = $('<div>').attr('class', 'rounded bg-primary text-light m-1 p-2');
             const forecastDate = $('<h5>').text(forecast.date);
             forecastElement.append(forecastDate);
 
@@ -199,7 +215,7 @@ $(document).ready(function() {
         citySearch(prettyCityName);
         $('#search-field').blur();
         $('#search-field').val('');
-    }
+    };
 
     /* Event listeners for search field and button */
     $('#search-form').on('submit', function(event) {
@@ -210,6 +226,11 @@ $(document).ready(function() {
     $('#search-button').on('click', function() {
         doSearch();
     });
+
+    $('#clear-button').on('click', function() {
+        localStorage.clear();
+        updateCityList();
+    })
 
     /* Update the city list in case we have local storage when the page loads */
     updateCityList();
