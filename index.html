@@ -31,64 +31,66 @@
     </header>      
     <div class="row" id="main">
         <div class="col-md-4 p-3 bg-light">
-            <h3>Search for a City</h3>
-            <!-- Search box and city list go here -->
-            <div class='mb-3' id='search-container'>
-                <form class='form-row' id='search-form'>
-                    <div class='col-auto'>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="search-field" placeholder="Enter a city">
-                            <span class="input-group-append">
-                                <button class="btn btn-outline-secondary bg-primary" type="button" id='search-button'>
-                                    <i class="fa fa-search text-light"></i>
+            <div class="m-1">
+                <h3>Search for a City</h3>
+                <!-- Search box and city list go here -->
+                <div class="mb-3" id="search-container">
+                    <form class="form-row" id="search-form">
+                        <div class="col-auto">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="search-field" placeholder="Enter a city">
+                                <span class="input-group-append">
+                                    <button class="btn btn-outline-secondary bg-primary" type="button" id="search-button">
+                                        <i class="fa fa-search text-light"></i>
+                                    </button>
+                                </span>
+                                <button class="m-1 btn btn-sm btn-light btn-outline-primary" type="button" id="clear-button">
+                                    Clear History
                                 </button>
-                            </span>
-                            <button class="m-1 btn btn-sm btn-light btn-outline-primary" type="button" id='clear-button'>
-                                Clear History
-                            </button>
-                        </div><!--input-group-->
-                    </div><!--col-auto-->
-                </form>
-            </div><!--search-container-->
-            <div class='hidden' id='city-container'>
-                <!-- List of cities goes here -->
-                <ul class='list-group' id='city-list'>
-                    <li class='list-group-item city-item' data-city='Fake City 1'>Fake City 1</li>
-                    <li class='list-group-item city-item' data-city='Fake City 2'>Fake City 2</li>
-                </ul>
+                            </div><!--input-group-->
+                        </div><!--col-auto-->
+                    </form>
+                </div><!--search-container-->
+                <div class="hidden" id="city-container">
+                    <!-- List of cities goes here -->
+                    <ul class="list-group" id="city-list">
+                        <li class="list-group-item city-item" data-city="Fake City 1">Fake City 1</li>
+                        <li class="list-group-item city-item" data-city="Fake City 2">Fake City 2</li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col-md-8">
             <!-- Weather information goes here -->
-            <div class='card' id='weather-info'>
+            <div class="card" id="weather-info">
                 <div class="card-body">
-                    <div class='row'>
-                        <div class='col-12'>
-                            <h3 id='city'>
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 id="city">
                                 Enter a city name in the search box and click the search button to find weather for a city.
                             </h3>
                         </div>
-                        <div class='col'>
-                            <img id='icon'></img>
+                        <div class="col">
+                            <img id="icon"></img>
                         </div>
                     </div>
-                    <p id='temp'>
+                    <p id="temp">
                         Example search: "Portland"
                     </p>
-                    <p id='humidity'>
+                    <p id="humidity">
 
                     </p>
-                    <p id='wind'>
+                    <p id="wind">
 
                     </p>
-                    <p id='uv'>
+                    <p id="uv">
                         
                     </p>    
                 </div>
             </div>
-            <div class='m-3' id='weather-forecast'>
-                <h3 id='forecast-heading'></h3>
-                <div class='row' id='forecast-container'>
+            <div class="m-3" id="weather-forecast">
+                <h3 id="forecast-heading"></h3>
+                <div class="row" id="forecast-container">
                 </div>
             </div>
         </div>
