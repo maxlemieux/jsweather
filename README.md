@@ -14,3 +14,7 @@ Clicking the button 'Clear History' will remove all stored city searches from lo
 * moment.js
 * FontAwesome
 * Google Fonts
+
+## Demo
+View the demo and try the app:
+https://maxlemieux.github.com/jsweather/
