@@ -25,6 +25,7 @@ $(document).ready(function() {
             cityElement.text(city);
             cityListElement.append(cityElement);
         };
+        $('#city-container').removeClass('hidden');
 
         $('.city-item').on('click', function(event) {
             /* Show saved info on the right */
@@ -37,7 +38,6 @@ $(document).ready(function() {
         let weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
         let forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}`;
         if (localStorage.getItem(cityName)) {
-            console.log('Local storage found');
             showCityInfo(cityName);
             updateCityList('add', cityName);
         } else {
@@ -46,7 +46,6 @@ $(document).ready(function() {
                 forecast: null,
                 forecastArray: [],
             };
-            console.log('Local storage not found, getting from API')
             
             /* Get both objects before processing the results */
             $.when(
@@ -73,7 +72,6 @@ $(document).ready(function() {
                     and update the object's entries for a day if a new high temp or humidity is found.
                 */
                 for (thisForecast of weatherObject.forecast) {
-                    //console.log(thisForecast);
                     const weatherIcon = `http://openweathermap.org/img/wn/${thisForecast.weather[0].icon}.png`;
                     const weatherDate = moment(thisForecast.dt_txt).format('M/DD/YYYY');
                     const weatherHour = moment(thisForecast.dt_txt).format('HH');
@@ -89,14 +87,12 @@ $(document).ready(function() {
                         );
                     };
                 };
-                //console.log(weatherObject.forecastArray);
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
                 
                 /* Make the API call for UV index info, based on the lat/long we just got */
                 getUvIndex(cityName)
             }, function() {
                 /* If there was an error with either of the AJAX calls */
-                console.log("error getting info, remove this city and show an error on page");
                 updateCityList('remove', cityName);
             });
 
@@ -128,7 +124,6 @@ $(document).ready(function() {
     /* Print information about the weather on the right side of the screen */
     const showCityInfo = (cityName) => {
         const cityInfo = JSON.parse(localStorage.getItem(cityName));
-        //console.log(cityInfo.weather);
         const weatherDate = moment.unix(cityInfo.weather.dt).format('M/DD/YYYY');
         const kelvinTemp = cityInfo.weather.main.temp;
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
