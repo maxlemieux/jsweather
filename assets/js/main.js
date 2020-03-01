@@ -44,6 +44,9 @@ $(document).ready(function() {
             /* Show saved info on the right */
             showCityInfo($(this).attr('data-city'));
         });
+
+        /* Set focus to the search field again */
+        $('#search-field').focus();
     };
 
     /* Request city info from localStorage or the Open Weather API */
@@ -184,16 +187,28 @@ $(document).ready(function() {
         }
     };
 
+    /* Reusable function to be called by search event listeners */
+    const doSearch = () => {
+        const cityName = $('#search-field').val();
+        
+        /*
+        Capitalize the first letter of the city
+        A more thorough implementation would look for spaces and capitalize all words 
+        */
+        prettyCityName = cityName[0].toUpperCase() + cityName.slice(1);
+        citySearch(prettyCityName);
+        $('#search-field').blur();
+        $('#search-field').val('');
+    }
+
     /* Event listeners for search field and button */
     $('#search-form').on('submit', function(event) {
         event.preventDefault();
-        const cityName = $('#search-field').val();
-        citySearch(cityName);
+        doSearch();
     });
 
     $('#search-button').on('click', function() {
-        const cityName = $('#search-field').val();
-        citySearch(cityName);
+        doSearch();
     });
 
     /* Update the city list in case we have local storage when the page loads */
