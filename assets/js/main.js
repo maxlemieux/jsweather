@@ -1,9 +1,18 @@
 $(document).ready(function() {
+    /* OpenWeather API key */
     const apiKey = '8d0d2314d6e034efd962fbaf225561c3';
     
-    let cityList = [];
-
+    /* Update the list of cities searched on */
     const updateCityList = (action, cityName) => {
+        /* Reset the list */
+        let cityList = [];
+
+        /* Get the list from localstorage if it exists */
+        if (localStorage.getItem('cityList')) {
+            cityList = JSON.parse(localStorage.getItem('cityList'));
+        };
+
+        /* Add or remove a city from the list */
         if (cityList.includes(cityName) && action === 'add') {
             return;
         } else if (action === 'add') {
@@ -15,6 +24,10 @@ $(document).ready(function() {
                 };
             };
         }
+
+        /* Update local storage with the cityList */
+        localStorage.setItem('cityList', JSON.stringify(cityList));
+
         /* Reset the unordered list of cities and rebuild it */
         const cityListElement = $('#city-list');
         cityListElement.empty();
@@ -182,4 +195,7 @@ $(document).ready(function() {
         const cityName = $('#search-field').val();
         citySearch(cityName);
     });
+
+    /* Update the city list in case we have local storage when the page loads */
+    updateCityList();
 });
