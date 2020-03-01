@@ -32,17 +32,6 @@ $(document).ready(function() {
         });
     };
 
-    $('#search-form').on('submit', function(event) {
-        event.preventDefault();
-        let cityName = $('#search-field').val();
-        citySearch(cityName);
-    });
-
-    $('#search-button').on('click', function() {
-        let cityName = $('#search-field').val();
-        citySearch(cityName);
-    });
-
     /* Request city info from localStorage or the Open Weather API */
     const citySearch = (cityName) => {
         let weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
@@ -100,7 +89,7 @@ $(document).ready(function() {
                         );
                     };
                 };
-                console.log(weatherObject.forecastArray);
+                //console.log(weatherObject.forecastArray);
                 localStorage.setItem(cityName, JSON.stringify(weatherObject));
                 
                 /* Make the API call for UV index info, based on the lat/long we just got */
@@ -153,6 +142,17 @@ $(document).ready(function() {
         $('#humidity').text(`Humidity: ${cityInfo.weather.main.humidity}`);
         $('#wind').text(`Wind Speed: ${cityInfo.weather.wind.speed}`);
         $('#uv').text(`UV Index: ${cityInfo.uvIndex}`);
+
+        /* Get the UV index severity: 0-3 low, 4-6 med, 7-9 high, over 9 DANGER */
+        const uvIndex = cityInfo.uvIndex;
+        let uvClass;
+        switch(true) {
+            case uvIndex < 4:
+                uvClass = 'uvLow';
+                break;
+            default:
+                break;
+        }
         
         /* Clear the forecast */
         $('#forecast-container').empty();
@@ -175,4 +175,16 @@ $(document).ready(function() {
             $('#forecast-container').append(forecastElement);
         }
     };
+
+    /* Event listeners for search field and button */
+    $('#search-form').on('submit', function(event) {
+        event.preventDefault();
+        const cityName = $('#search-field').val();
+        citySearch(cityName);
+    });
+
+    $('#search-button').on('click', function() {
+        const cityName = $('#search-field').val();
+        citySearch(cityName);
+    });
 });
