@@ -87,7 +87,7 @@ $(document).ready(function() {
                 and update the object's entries for a day if a new high temp or humidity is found.
                 */
                 for (thisForecast of weatherObject.forecast) {
-                    const weatherIcon = `http://openweathermap.org/img/wn/${thisForecast.weather[0].icon}.png`;
+                    const weatherIcon = `https://openweathermap.org/img/wn/${thisForecast.weather[0].icon}.png`;
                     const weatherDate = moment(thisForecast.dt_txt).format('M/DD/YYYY');
                     const weatherHour = moment(thisForecast.dt_txt).format('HH');
                     const fahrenheitTemp = ((thisForecast.main.temp - 273.15) * 9/5 + 32).toPrecision(3);
@@ -125,7 +125,7 @@ $(document).ready(function() {
         const cityInfo = JSON.parse(localStorage.getItem(cityName));
         const lon = cityInfo.weather.coord.lon;
         const lat = cityInfo.weather.coord.lat;
-        const uvIndexURL = `http://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`;
+        const uvIndexURL = `https://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`;
         $.ajax({
             url: uvIndexURL,
             method: "GET",
@@ -149,7 +149,7 @@ $(document).ready(function() {
         const kelvinTemp = cityInfo.weather.main.temp;
         const fahrenheitTemp = ((kelvinTemp - 273.15) * 9/5 + 32).toPrecision(3);
         const weatherIcon = cityInfo.weather.weather[0].icon;
-        const iconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+        const iconUrl = `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
 
         /* Show today's detailed information */
         $('#city').text(`${cityName} (${weatherDate})`);
